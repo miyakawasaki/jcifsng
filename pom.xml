@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.asaokawasaki</groupId>
-	<artifactId>jcifsomitservlet</artifactId>
+	<groupId>com.github.asaokawasaki.miyakawasaki.jcifsng</groupId>
+	<artifactId>jcifsng</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>jcifsngomitservlet</name>
-	<url>https://github.com/asaokawasaki/jcifsngomitservlet</url>
+	<url>https://github.com/miyakawasaki/jcifsng</url>
 	<description>Remove servlet dependencies from original.</description>
 
 	<licenses>
@@ -30,9 +30,9 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/asaokawasaki/jcifsngomitservlet</url>
-		<connection>scm:git:git@github.com:asaokawasaki/jcifsngomitservlet.git</connection>
-		<developerConnection>scm:git:git@github.com:asaokawasaki/jcifsngomitservlet.git</developerConnection>
+		<url>https://github.com/miyakawasaki/jcifsng</url>
+		<connection>scm:git:git@github.com:miyakawasaki/jcifsng.git</connection>
+		<developerConnection>scm:git:git@github.com:miyakawasaki/jcifsng.git</developerConnection>
 	</scm>
 
 	<distributionManagement>
