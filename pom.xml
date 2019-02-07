@@ -5,7 +5,7 @@
 
 	<groupId>com.github.miyakawasaki.jcifsng</groupId>
 	<artifactId>jcifsng</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>jcifsng</name>
@@ -22,7 +22,7 @@
 
 	<developers>
 		<developer>
-			<name>Kakio Kawasaki</name>
+			<name>asaokawasaki</name>
 			<email>kakiokawasaki@sonatype.com</email>
 			<organization>Sonatype</organization>
 			<organizationUrl>http://www.sonatype.com</organizationUrl>
@@ -36,15 +36,11 @@
 	</scm>
 
 
-	<!-- distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository> </distributionManagement -->
-
 	<distributionManagement>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>Nexus Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<parent>
