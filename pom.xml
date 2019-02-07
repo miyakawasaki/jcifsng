@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.asaokawasaki.miyakawasaki.jcifsng</groupId>
+	<groupId>com.github.miyakawasaki.jcifsng</groupId>
 	<artifactId>jcifsng</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>jcifsngomitservlet</name>
+	<name>jcifsng</name>
 	<url>https://github.com/miyakawasaki/jcifsng</url>
 	<description>Remove servlet dependencies from original.</description>
 
@@ -22,7 +22,7 @@
 
 	<developers>
 		<developer>
-			<name>Asao Kawasaki</name>
+			<name>Kakio Kawasaki</name>
 			<email>kakiokawasaki@sonatype.com</email>
 			<organization>Sonatype</organization>
 			<organizationUrl>http://www.sonatype.com</organizationUrl>
@@ -35,11 +35,16 @@
 		<developerConnection>scm:git:git@github.com:miyakawasaki/jcifsng.git</developerConnection>
 	</scm>
 
+
+	<!-- distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository> </distributionManagement -->
+
 	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Nexus Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
 
 	<parent>
@@ -84,19 +89,10 @@
 					</descriptorRefs>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<docencoding>UTF-8</docencoding>
-					<charset>UTF-8</charset>
-					<doclint>none</doclint>
-					<links>
-						<link>http://docs.oracle.com/javase/8/docs/api/</link>
-					</links>
-				</configuration>
-			</plugin>
+			<!-- plugin> <artifactId>maven-javadoc-plugin</artifactId> <version>3.0.1</version>
+				<configuration> <encoding>UTF-8</encoding> <docencoding>UTF-8</docencoding>
+				<charset>UTF-8</charset> <doclint>none</doclint> <links> <link>http://docs.oracle.com/javase/8/docs/api/</link>
+				</links> </configuration> </plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
