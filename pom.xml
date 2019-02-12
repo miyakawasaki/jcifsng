@@ -5,7 +5,7 @@
 
 	<groupId>com.github.miyakawasaki.jcifsng</groupId>
 	<artifactId>jcifsng</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>jcifsng</name>
@@ -43,52 +43,70 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>9</version>
-	</parent>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
-	</properties>
+        <!-- This keeps javadoc from failing on projects with no actual .java source files -->
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+        <java.version>1.8</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+    </properties>
+
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.6.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<skipTests>true</skipTests>
+					<compilerVersion>1.7</compilerVersion>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<!-- configuration> <nexusUrl>http://localhost:8081/nexus/</nexusUrl>
+					<serverId>local-nexus</serverId> </configuration -->
+
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>2.2.1</version>
 				<executions>
 					<execution>
-						<id>source-jar</id>
-						<phase>package</phase>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+					<source>1.8</source>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
 			</plugin>
-			<!-- plugin> <artifactId>maven-javadoc-plugin</artifactId> <version>3.0.1</version>
-				<configuration> <encoding>UTF-8</encoding> <docencoding>UTF-8</docencoding>
-				<charset>UTF-8</charset> <doclint>none</doclint> <links> <link>http://docs.oracle.com/javase/8/docs/api/</link>
-				</links> </configuration> </plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -103,168 +121,10 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-
-				<configuration>
-					<instructions>
-						<Bundle-Version>${osgi.version}</Bundle-Version>
-						<Bundle-License>LGPL</Bundle-License>
-						<Bundle-Vendor>CodeLibs</Bundle-Vendor>
-						<Bundle-SymbolicName>org.codelibs.jcifs</Bundle-SymbolicName>
-						<Export-Package>
-							jcifs.internal*;version="${osgi.pkg.version}";x-internal:=true,
-							jcifs*;version="${osgi.pkg.version}",
-						</Export-Package>
-						<Private-Package />
-						<Import-Package>
-							javax.servlet*;resolution:=optional,
-							com.sun.security.jgss;resolution:=optional,
-							org.bouncycastle*;version="1.54",
-							!jcifs.internal*,
-							*
-						</Import-Package>
-					</instructions>
-					<addDependenciesToRepository>true</addDependenciesToRepository>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>clirr-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>check-compatibility</id>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<failOnError>false</failOnError>
-					<ignored>
-						<difference>
-							<!-- seems to be a clirr bug that it cannot handle the different inherited
-								return types -->
-							<className>**</className>
-							<differenceType>7006</differenceType>
-							<method>*</method>
-							<from>*</from>
-							<to>*</to>
-						</difference>
-					</ignored>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>theMainClass</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M1</version>
-				<configuration>
-					<includes>
-						<include>**/**Test.java</include>
-					</includes>
-					<systemPropertyVariables>
-						<networkaddress.cache.ttl>-1</networkaddress.cache.ttl>
-						<networkaddress.cache.negative.ttl>-1</networkaddress.cache.negative.ttl>
-					</systemPropertyVariables>
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>jcifs.tests.PrintingRunListener</value>
-						</property>
-					</properties>
-					<useSystemClassLoader>false</useSystemClassLoader>
-					<encoding>UTF-8</encoding>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<skipTests>true</skipTests>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-					<excludes>
-						<exclude>pom.xml</exclude>
-						<exclude>breaking-changes.xml</exclude>
-						<exclude>README.md</exclude>
-						<exclude>build.properties</exclude>
-						<exclude>src/test/resources/**</exclude>
-						<exclude>**/*.idl</exclude>
-						<exclude>**/*.css</exclude>
-						<exclude>.*</exclude>
-						<exclude>.*/**</exclude>
-						<exclude>META-INF/**</exclude>
-						<exclude>src/main/java/jcifs/dcerpc/msrpc/netdfs.java</exclude>
-						<exclude>src/main/java/jcifs/dcerpc/msrpc/srvsvc.java</exclude>
-						<exclude>src/main/java/jcifs/dcerpc/msrpc/samr.java</exclude>
-						<exclude>src/main/java/jcifs/dcerpc/msrpc/lsarpc.java</exclude>
-						<exclude>src/main/java/jcifs/dcerpc/rpc.java</exclude>
-					</excludes>
-					<licenses>
-						<license
-							implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-							<licenseFamilyCategory>LGPL</licenseFamilyCategory>
-							<licenseFamilyName>GNU Lesser General Public License</licenseFamilyName>
-							<notes />
-							<patterns>
-								<pattern>This library is free software; you can redistribute it</pattern>
-								<pattern>GNU Lesser General Public License</pattern>
-							</patterns>
-						</license>
-					</licenses>
-					<licenseFamilies>
-						<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-							<familyName>GNU Lesser General Public License</familyName>
-						</licenseFamily>
-					</licenseFamilies>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+
+
 	<dependencies>
 		<!-- dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version> <scope>provided</scope> </dependency -->
